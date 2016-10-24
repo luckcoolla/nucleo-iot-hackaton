@@ -38,3 +38,15 @@ captures/
 
 # Keystore files
 *.jks
+
+/.idea/
+/out/
+build
+.gradle
+/*.iml
+/app/application.iml
+/local.properties
+.project
+.classpath
+.project~
+.DS_Store
