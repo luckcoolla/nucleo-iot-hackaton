@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "by.iot.nucleo.spectre.getyoursensors"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 4
+        versionName "1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MQTT_SERVER_URL", project.properties.mqtt_server_url)
+        buildConfigField("String", "BACKEND_SERVER_URL", project.properties.backend_server_url)
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.google.firebase:firebase-core:9.6.1'
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
+
+
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
+    compile 'com.squareup.picasso:picasso:2.3.4'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
+    compile 'com.snappydb:snappydb-lib:0.5.2'
+
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.1-SNAPSHOT'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1-SNAPSHOT'
+
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.robolectric:shadows-support-v4:3.0'
+    //apache legacy is fix for robolectric issue https://github.com/robolectric/robolectric/issues/1862
+    testCompile files("${android.getSdkDirectory().getAbsolutePath()}"
+            + File.separator + "platforms" + File.separator + "android-23"
+            + File.separator + "optional" + File.separator + "org.apache.http.legacy.jar")
+    testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.assertj:assertj-core:1.7.1'
+}
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryAlpha">#444444</color>
+
+    <color name="color_temp">#aa2432</color>
+    <color name="color_hum">#aa24aa</color>
+    <color name="color_pressure">#24aaaa</color>
+
+    <color name="color_acc_x">#e74c3c</color>
+    <color name="color_acc_y">#27ae60</color>
+    <color name="color_acc_z">#3498db</color>
+
+    <color name="color_gyr_x">#004c3c</color>
+    <color name="color_gyr_y">#00ae60</color>
+    <color name="color_gyr_z">#0098db</color>
+
+    <color name="color_mag_x">#e7bb3c</color>
+    <color name="color_mag_y">#27bb60</color>
+    <color name="color_mag_z">#34bbdb</color>
+</resources>

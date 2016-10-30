@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "750760533134",
+    "firebase_url": "https://iot-hackathon-37e64.firebaseio.com",
+    "project_id": "iot-hackathon-37e64",
+    "storage_bucket": "iot-hackathon-37e64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750760533134:android:6dea8c3c66cd7249",
+        "android_client_info": {
+          "package_name": "by.iot.nucleo.spectre.getyoursensors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750760533134-tgd9tneo23c25kkg8bqad2aethve04l8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBWEaSaUxpyXJIlOa7AziliMZLG0ryd50"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
