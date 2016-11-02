@@ -2,6 +2,7 @@ package com.github.dlinov.iot.server.db.mongo
 
 import akka.event.LoggingAdapter
 import com.github.dlinov.iot.server.models._
+import com.github.dlinov.iot.server.util.Implicits.FutureRecovery
 import org.bson.conversions.Bson
 import org.mongodb.scala.bson.{BsonArray, BsonDocument, BsonNumber, BsonObjectId, BsonString, BsonValue}
 import org.mongodb.scala._
@@ -12,8 +13,8 @@ import org.mongodb.scala.model.Updates._
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
-class MongoConnector(val uri: String, dbName: String, log: LoggingAdapter)
-                    (implicit ec: ExecutionContext)
+class MongoConnector(val uri: String, dbName: String)
+                    (implicit ec: ExecutionContext, log: LoggingAdapter)
   extends ObservableImplicits {
 
   lazy val mongoClient: MongoClient = MongoClient(uri)
@@ -159,11 +160,7 @@ class MongoConnector(val uri: String, dbName: String, log: LoggingAdapter)
   def getUserBy(filter: Bson): Future[Option[User]] = {
     users.find(filter)
       .toFuture()
-      .recoverWith {
-        case e: Throwable ⇒
-          log.error(e, s"getUserBy $filter failed")
-          Future.failed(e)
-      }
+      .recoverWithLog()
       .map(_.headOption.map(_.toUser))
   }
 
@@ -183,11 +180,7 @@ class MongoConnector(val uri: String, dbName: String, log: LoggingAdapter)
       token ← getToken(login, password)
       maybeId ← token.fold(users.insertOne(User(id = newUserId, login = login, password = password).toDocument)
         .toFuture()
-        .recoverWith {
-          case e: Throwable ⇒
-            log.error(e, s"getToken failed for login $login")
-            Future.failed(e)
-        }
+        .recoverWithLog()
         .map(_ ⇒ newUserId))(_ ⇒ Future successful Option.empty[String])
     } yield maybeId
   }
@@ -210,11 +203,7 @@ class MongoConnector(val uri: String, dbName: String, log: LoggingAdapter)
           )
           users.findOneAndUpdate(equal(uf.loginF, login), addToSet(uf.boardsF, newBoard.toDocument))
             .toFuture()
-            .recoverWith {
-              case e: Throwable ⇒
-                log.error(e, s"users.findOneAndUpdate failed for login $login")
-                Future.failed(e)
-            }
+            .recoverWithLog()
             .map(_.headOption.map(_.toUser.boards))
         }
       )
@@ -233,13 +222,52 @@ class MongoConnector(val uri: String, dbName: String, log: LoggingAdapter)
       )(_ ⇒
         users.findOneAndUpdate(equal(uf.idF, userId), addToSet(uf.rulesF, rule.copy(id = Some(newId)).toBsonDocument))
           .toFuture()
-          .recoverWith {
-            case e: Throwable ⇒
-              log.error(e, s"users.findOneAndUpdate failed for token $userId")
-              Future.failed(e)
-          }
+          .recoverWithLog()
           .map(_.headOption.map(_.toUser.rules))
       )
+    } yield rules
+  }
+
+  def updateUserRule(userId: String, rule: Rule) = {
+    for {
+      user ← getUserByToken(userId)
+      rules ← user.fold(
+        Future successful Option.empty[Vector[Rule]]
+      )(u ⇒ {
+        val updatedRules = u.rules.collect {
+          case r if r.id == rule.id ⇒
+            r.copy(
+              name = rule.name,
+              boardId = rule.boardId,
+              min = rule.min.orElse(r.min),
+              max = rule.max.orElse(r.max)
+            )
+          case r ⇒ r
+        }
+        users.findOneAndUpdate(
+          equal(uf.idF, userId),
+          set(uf.rulesF, updatedRules.map(_.toBsonDocument)))
+          .toFuture()
+          .recoverWithLog()
+          .map(_.headOption.map(_.toUser.rules))
+      })
+    } yield rules
+  }
+
+  def removeUserRule(userId: String, ruleId: String) = {
+    for {
+      user ← getUserByToken(userId)
+      rules ← user.fold(
+        Future successful Option.empty[Vector[Rule]]
+      )(u ⇒ {
+        val newRules = u.rules.filterNot(_.id.contains(ruleId))
+        users.findOneAndUpdate(
+          equal(uf.idF, userId),
+          set(uf.rulesF, BsonArray(newRules.map(_.toBsonDocument))))
+          .toFuture()
+          .recoverWithLog()
+          .map(_.headOption.map(_.toUser.rules))
+      })
     } yield rules
   }
 }

@@ -18,7 +18,8 @@ object Boot extends App with AppSettings {
   val host = "0.0.0.0"
   val mongodbUri = Option(System.getenv("MONGODB_URI")).getOrElse("mongodb://localhost/iot")
   val dbName = mongodbUri.split("/").last
-  val db = new MongoConnector(mongodbUri, dbName, system.log)
+  implicit val loggingAdapter = system.log
+  val db = new MongoConnector(mongodbUri, dbName)
 
   val iotTopics = Vector("iot/#", "iot-bot/#")
   val mqttSubscriber = system.actorOf(

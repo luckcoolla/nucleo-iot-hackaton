@@ -52,6 +52,20 @@ class RootRoute(db: MongoConnector)(implicit ec: ExecutionContext) extends JsonS
               db.addUserRule(token, rule)
             }
           }
+        } ~
+        put {
+          entity(as[Rule]) { rule ⇒
+            complete {
+              db.updateUserRule(token, rule)
+            }
+          }
+        } ~
+        delete {
+          parameter("ruleId") { ruleId ⇒
+            complete {
+              db.removeUserRule(token, ruleId)
+            }
+          }
         }
       }
     } ~

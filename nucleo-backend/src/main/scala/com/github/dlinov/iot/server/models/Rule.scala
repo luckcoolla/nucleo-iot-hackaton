@@ -5,5 +5,4 @@ case class Rule(id: Option[String] = None,
                 boardId: String,
                 sensorType: SensorType,
                 min: Option[Double],
-                max: Option[Double]
-               )
+                max: Option[Double])
