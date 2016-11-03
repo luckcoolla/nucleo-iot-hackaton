@@ -3,7 +3,7 @@ package com.github.dlinov.iot.server.api
 import akka.http.scaladsl.server.Directives._
 import com.github.dlinov.iot.server.db.mongo.MongoConnector
 import com.github.dlinov.iot.server.json.JsonSupport
-import com.github.dlinov.iot.server.models.Rule
+import com.github.dlinov.iot.server.models.{Board, Rule}
 
 import scala.concurrent.ExecutionContext
 
@@ -31,10 +31,13 @@ class RootRoute(db: MongoConnector)(implicit ec: ExecutionContext) extends JsonS
       }
     } ~
     path(boardsPrefix) {
-      get {
-        parameter("token") { token ⇒
-          complete {
-            db.getUserBoards(token)
+      parameter("token") { token ⇒
+        get {
+          complete(db.getUserBoards(token))
+        } ~
+        put {
+          entity(as[Board]) { board ⇒
+            complete { db.updateBoardName(token, board.id, board.name) }
           }
         }
       }

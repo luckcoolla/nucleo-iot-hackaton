@@ -61,12 +61,12 @@ class MongoConnector(val uri: String, dbName: String)
       val password = document.getOrElse(passwordF, "").asInstanceOf[BsonString].getValue
       val boards = document.get(boardsF)
         .map(_.asInstanceOf[BsonArray].getValues.asScala
-          .map(v ⇒ Document(v.asDocument()).toBoard(login)).toVector)
-        .getOrElse(Vector.empty[Board])
+          .map(v ⇒ Document(v.asDocument()).toBoard(login)).toSeq)
+        .getOrElse(Seq.empty[Board])
       val rules = document.get(rulesF)
         .map(_.asInstanceOf[BsonArray].getValues.asScala
-          .map(v ⇒ Document(v.asDocument()).toRule).toVector)
-        .getOrElse(Vector.empty[Rule])
+          .map(v ⇒ Document(v.asDocument()).toRule).toSeq)
+        .getOrElse(Seq.empty[Rule])
       User(id = id, login = login, password = password, boards = boards, rules = rules)
     }
 
@@ -191,7 +191,7 @@ class MongoConnector(val uri: String, dbName: String)
     for {
       user ← getUserByLogin(login)
       boards ← user.fold(
-        Future successful Option.empty[Vector[Board]]
+        Future successful Option.empty[Seq[Board]]
       )(u ⇒
         if (u.boards.exists(_.id.contains(boardId))) {
           Future successful Some(u.boards)
@@ -218,13 +218,13 @@ class MongoConnector(val uri: String, dbName: String)
     for {
       user ← getUserByToken(userId)
       rules ← user.fold(
-        Future successful Option.empty[Vector[Rule]]
-      )(_ ⇒
-        users.findOneAndUpdate(equal(uf.idF, userId), addToSet(uf.rulesF, rule.copy(id = Some(newId)).toBsonDocument))
-          .toFuture()
-          .recoverWithLog()
-          .map(_.headOption.map(_.toUser.rules))
-      )
+        Future successful Option.empty[Seq[Rule]]
+      )(_ ⇒ {
+        val newRule = rule.copy(id = Some(newId))
+        users.findOneAndUpdate(
+          equal(uf.idF, userId), addToSet(uf.rulesF, newRule.toBsonDocument)
+        ).toFuture().recoverWithLog().map(_.headOption.map(_.toUser.rules :+ newRule))
+      })
     } yield rules
   }
 
@@ -232,7 +232,7 @@ class MongoConnector(val uri: String, dbName: String)
     for {
       user ← getUserByToken(userId)
       rules ← user.fold(
-        Future successful Option.empty[Vector[Rule]]
+        Future successful Seq.empty[Rule]
       )(u ⇒ {
         val updatedRules = u.rules.collect {
           case r if r.id == rule.id ⇒
@@ -244,30 +244,43 @@ class MongoConnector(val uri: String, dbName: String)
             )
           case r ⇒ r
         }
+        val bsonArray = BsonArray(updatedRules.map(_.toBsonDocument))
         users.findOneAndUpdate(
-          equal(uf.idF, userId),
-          set(uf.rulesF, updatedRules.map(_.toBsonDocument)))
-          .toFuture()
-          .recoverWithLog()
-          .map(_.headOption.map(_.toUser.rules))
+          equal(uf.idF, userId), set(uf.rulesF, bsonArray)
+        ).toFuture().recoverWithLog().map(_ ⇒ updatedRules)
       })
     } yield rules
   }
 
-  def removeUserRule(userId: String, ruleId: String) = {
+  def removeUserRule(userId: String, ruleId: String): Future[Option[Seq[Rule]]] = {
     for {
       user ← getUserByToken(userId)
       rules ← user.fold(
-        Future successful Option.empty[Vector[Rule]]
+        Future successful Option.empty[Seq[Rule]]
       )(u ⇒ {
         val newRules = u.rules.filterNot(_.id.contains(ruleId))
+        val newRulesBsonArray = BsonArray(newRules.map(_.toBsonDocument))
         users.findOneAndUpdate(
-          equal(uf.idF, userId),
-          set(uf.rulesF, BsonArray(newRules.map(_.toBsonDocument))))
-          .toFuture()
-          .recoverWithLog()
-          .map(_.headOption.map(_.toUser.rules))
+          equal(uf.idF, userId), set(uf.rulesF, newRulesBsonArray)
+        ).toFuture().recoverWithLog().map(_.headOption.map(_ ⇒ newRules))
       })
     } yield rules
+  }
+
+  def updateBoardName(userId: String, boardId: Option[String], boardName: String) = {
+    for {
+      user ← getUserByToken(userId)
+      boards ← user.fold(Future successful Seq.empty[Board])(u ⇒ {
+        val updatedBoards = u.boards.collect {
+          case b if b.id == boardId ⇒ b.copy(name = boardName)
+          case b ⇒ b
+        }
+        val updatedBoardsBsonArray = BsonArray(updatedBoards.map(_.toBsonDocument))
+        users.findOneAndUpdate(
+          equal(uf.idF, userId),
+          set(uf.boardsF, updatedBoardsBsonArray)
+        ).toFuture().recoverWithLog().map(_ ⇒ updatedBoards)
+      })
+    } yield boards
   }
 }

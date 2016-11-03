@@ -17,7 +17,7 @@ class SensorRulesWatcher(db: MongoConnector) extends Actor {
       db.getUserRulesByLogin(login).foreach(_.foreach(processRules(login, _, sensors)))
   }
 
-  def processRules(login: String, rules: Vector[Rule], sensors: Vector[Sensor]) = {
+  def processRules(login: String, rules: Seq[Rule], sensors: Seq[Sensor]) = {
     sensors.flatMap(s ⇒ {
       val sensorRules = rules.filter(_.sensorType == s.sensorType)
       sensorRules.collect {
@@ -34,6 +34,6 @@ class SensorRulesWatcher(db: MongoConnector) extends Actor {
 
 object SensorRulesWatcher {
   object Messages {
-    case class SensorData(userLogin: String, sensors: Vector[Sensor])
+    case class SensorData(userLogin: String, sensors: Seq[Sensor])
   }
 }

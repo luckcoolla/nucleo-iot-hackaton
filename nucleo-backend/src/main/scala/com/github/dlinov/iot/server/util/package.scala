@@ -23,7 +23,7 @@ package object util {
                         (implicit ec: ExecutionContext, log: LoggingAdapter) =
         f.recoverWith {
           case e: Throwable ⇒
-            maybeCustomErrorMessage.foreach(log.error(e, _))
+            maybeCustomErrorMessage.fold(log.error(e, e.getMessage))(log.error(e, _))
             Future.failed(e)
         }
     }
