@@ -67,7 +67,7 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
         View rootView = inflater.inflate(R.layout.board_detail, container, false);
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.board_detail)).setText("MQTT topic: " + mItem.getMqttTopic());
+            ((TextView) rootView.findViewById(R.id.board_detail_tv)).setText("MQTT topic: " + mItem.getMqttTopic());
         }
         chartsWrap = (LinearLayout) rootView.findViewById(R.id.chartWrap);
 
@@ -95,7 +95,7 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
                     String key = sensor.getSensorName() + sensor.getSensorType().name();
                     LineChart lineChart = chartMap.get(key);
                     if (lineChart == null) {
-                        lineChart = initNewChart(sensor.getSensorType());
+                        lineChart = initNewChart(sensor.getSensorType(), chartMap.size());
                         if (lineChart != null) {
                             chartMap.put(key, lineChart);
                         }
@@ -112,15 +112,16 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
         });
     }
 
-    private LineChart initNewChart(SensorType sensorType) {
+    private LineChart initNewChart(SensorType sensorType, int initializedChartsCount) {
 //      FIXME dynamic inflation doesn't work
 //        LayoutInflater inflater = (LayoutInflater) App.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View inflatedLayout= inflater.inflate(R.layout.sensor_item_layout, chartsWrap, false);
 //        LineChart chart1 = (LineChart) inflatedLayout.findViewById(R.id.chart_item);
 //        chartsWrap.addView(inflatedLayout);
         LineChart chart = null;
+        //if initializedChartsCount is 0 then get the first one from list
         for (int i = 0; i < chartsWrap.getChildCount(); i++) {
-            if (chartsWrap.getChildAt(i).getVisibility() == View.GONE
+            if ((initializedChartsCount == 0 || chartsWrap.getChildAt(i).getVisibility() == View.GONE)
                     && chartsWrap.getChildAt(i) instanceof LineChart) {
                 chartsWrap.getChildAt(i).setVisibility(View.VISIBLE);
                 chart = (LineChart) chartsWrap.getChildAt(i);

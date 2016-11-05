@@ -1,30 +1,27 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/board_detail"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        tools:context="by.iot.nucleo.spectre.getyoursensors.BoardDetailFragment"
-        android:text="2134"/>
+    tools:context="by.iot.nucleo.spectre.getyoursensors.BoardDetailFragment">
 
     <ScrollView
-        android:layout_height="0px"
-        android:layout_weight="1"
-        android:layout_width="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
         <LinearLayout
             android:id="@+id/chartWrap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/board_detail_tv"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:textIsSelectable="true"/>
 
             <!-- TODO fix Error during dynamic inflating! pasting a crunch for this time-->
 
@@ -32,19 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_margin="10dp"
-                android:visibility="gone"/>
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_margin="10dp"
-                android:visibility="gone"/>
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_margin="10dp"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:layout_width="match_parent"
@@ -97,6 +82,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-</LinearLayout>
+</FrameLayout>
 
