@@ -30,6 +30,7 @@ import by.iot.nucleo.spectre.getyoursensors.model.Board;
 import by.iot.nucleo.spectre.getyoursensors.model.Sensor;
 import by.iot.nucleo.spectre.getyoursensors.model.SensorType;
 import by.iot.nucleo.spectre.getyoursensors.data.DataManager;
+import by.iot.nucleo.spectre.getyoursensors.service.MqttService;
 
 /**
  * A fragment representing a single Board detail screen.
@@ -37,7 +38,7 @@ import by.iot.nucleo.spectre.getyoursensors.data.DataManager;
  * in two-pane mode (on tablets) or a {@link BoardDetailActivity}
  * on handsets.
  */
-public class BoardDetailFragment extends Fragment implements App.MqttListener {
+public class BoardDetailFragment extends Fragment implements MqttService.MqttListener {
     public static final String ARG_ITEM_ID = "item_id";
     private static final String TAG = BoardDetailFragment.class.getName();
     private Board mItem;
@@ -76,13 +77,13 @@ public class BoardDetailFragment extends Fragment implements App.MqttListener {
     @Override
     public void onResume() {
         super.onResume();
-        App.addListener(mItem.getMqttTopic(), this);
+        MqttService.addListener(mItem.getMqttTopic(), this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        App.removeListener(mItem.getMqttTopic(), this);
+        MqttService.removeListener(mItem.getMqttTopic(), this);
     }
 
     @Override
