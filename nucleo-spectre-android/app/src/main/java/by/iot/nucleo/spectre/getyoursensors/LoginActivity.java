@@ -194,8 +194,9 @@ public class LoginActivity extends OrientationBlockActivity {
                     Log.e(TAG, "UserLoginTask.doInBackground failed: boards is null");
                     return false;
                 }
+                DataManager.clearBoardItems();
                 for (Board board : boards) {
-                    DataManager.addItem(board);
+                    DataManager.addBoardItem(board);
                 }
             } catch (RetrofitError error) {
                 Log.e(TAG, error.getLocalizedMessage(), error.getCause());

@@ -30,6 +30,7 @@ public class MqttService {
     private static Map<String, List<MqttListener>> mqttListeners = new HashMap<>();
 
     public static void addListener(String topic, MqttListener listener) {
+        Log.d(TAG, "#addListener: "+listener);
         List<MqttListener> mqttListeners = MqttService.mqttListeners.get(topic);
         if (mqttListeners == null) {
             mqttListeners = new ArrayList<>();
@@ -39,6 +40,7 @@ public class MqttService {
     }
 
     public static void removeListener(String topic, MqttListener listener) {
+        Log.d(TAG, "#removeListener: "+listener);
         List<MqttListener> mqttListeners = MqttService.mqttListeners.get(topic);
         if (mqttListeners == null) {
             mqttListeners = new ArrayList<>();

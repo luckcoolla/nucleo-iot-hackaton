@@ -17,8 +17,12 @@ public class DataManager {
      */
     public static final Map<String, Board> ITEM_MAP = new HashMap<String, Board>();
 
-    public static void addItem(Board item) {
+    public static void addBoardItem(Board item) {
         ITEM_MAP.put(item.getBoardId(), item);
+    }
+
+    public static void clearBoardItems() {
+        ITEM_MAP.clear();
     }
 
     //for tests:
@@ -31,7 +35,7 @@ public class DataManager {
 //                dummyItem.setBoardId("0080E1B886C0");
 //                dummyItem.setMqttTopic("iot/Kir/0080E1B886C0");
 //            }
-//            addItem(dummyItem);
+//            addBoardItem(dummyItem);
 //        }
 //    }
 //    private static Board createDummyItem(final int position) {
