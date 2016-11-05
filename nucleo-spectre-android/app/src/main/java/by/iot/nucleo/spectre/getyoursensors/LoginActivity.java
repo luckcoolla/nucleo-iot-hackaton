@@ -23,8 +23,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
-import by.iot.nucleo.spectre.getyoursensors.data.Board;
-import by.iot.nucleo.spectre.getyoursensors.dummy.DummyBoardContent;
+import by.iot.nucleo.spectre.getyoursensors.model.Board;
+import by.iot.nucleo.spectre.getyoursensors.data.DataManager;
 import by.iot.nucleo.spectre.getyoursensors.service.DataService;
 import retrofit.RetrofitError;
 
@@ -195,7 +195,7 @@ public class LoginActivity extends OrientationBlockActivity {
                     return false;
                 }
                 for (Board board : boards) {
-                    DummyBoardContent.addItem(board);
+                    DataManager.addItem(board);
                 }
             } catch (RetrofitError error) {
                 Log.e(TAG, error.getLocalizedMessage(), error.getCause());

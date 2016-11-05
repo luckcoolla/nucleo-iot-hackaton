@@ -1,9 +1,8 @@
-package by.iot.nucleo.spectre.getyoursensors.data;
+package by.iot.nucleo.spectre.getyoursensors.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /*
  * Response example:

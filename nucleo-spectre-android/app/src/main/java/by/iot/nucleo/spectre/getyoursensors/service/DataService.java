@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import by.iot.nucleo.spectre.getyoursensors.App;
 import by.iot.nucleo.spectre.getyoursensors.BuildConfig;
 import by.iot.nucleo.spectre.getyoursensors.Settings;
-import by.iot.nucleo.spectre.getyoursensors.data.Board;
+import by.iot.nucleo.spectre.getyoursensors.model.Board;
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Query;

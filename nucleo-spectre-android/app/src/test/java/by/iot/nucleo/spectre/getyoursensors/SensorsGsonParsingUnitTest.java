@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import by.iot.nucleo.spectre.getyoursensors.data.Sensor;
-import by.iot.nucleo.spectre.getyoursensors.data.SensorType;
+import by.iot.nucleo.spectre.getyoursensors.model.Sensor;
+import by.iot.nucleo.spectre.getyoursensors.model.SensorType;
 import by.iot.nucleo.spectre.getyoursensors.service.SensorsDeserialiser;
 
 import static org.junit.Assert.*;

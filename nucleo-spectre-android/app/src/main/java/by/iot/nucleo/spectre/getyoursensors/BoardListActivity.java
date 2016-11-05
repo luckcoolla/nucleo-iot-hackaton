@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import by.iot.nucleo.spectre.getyoursensors.data.Board;
-import by.iot.nucleo.spectre.getyoursensors.dummy.DummyBoardContent;
+import by.iot.nucleo.spectre.getyoursensors.model.Board;
+import by.iot.nucleo.spectre.getyoursensors.data.DataManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class BoardListActivity extends BaseActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
-                new ArrayList<Board>(DummyBoardContent.ITEM_MAP.values())));
+                new ArrayList<Board>(DataManager.ITEM_MAP.values())));
     }
 
     public class SimpleItemRecyclerViewAdapter

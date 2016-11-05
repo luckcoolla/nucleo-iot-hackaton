@@ -1,19 +1,16 @@
-package by.iot.nucleo.spectre.getyoursensors.dummy;
+package by.iot.nucleo.spectre.getyoursensors.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import by.iot.nucleo.spectre.getyoursensors.Settings;
-import by.iot.nucleo.spectre.getyoursensors.data.Board;
+import by.iot.nucleo.spectre.getyoursensors.model.Board;
 
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p>
  */
-public class DummyBoardContent {
+public class DataManager {
 
     /**
      * A map of sample (dummy) items, by ID.

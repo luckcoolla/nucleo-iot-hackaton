@@ -1,4 +1,4 @@
-package by.iot.nucleo.spectre.getyoursensors.data;
+package by.iot.nucleo.spectre.getyoursensors.model;
 
 import android.util.Log;
 

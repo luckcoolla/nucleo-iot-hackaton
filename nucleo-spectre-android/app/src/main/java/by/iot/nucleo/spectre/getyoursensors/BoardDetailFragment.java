@@ -1,7 +1,6 @@
 package by.iot.nucleo.spectre.getyoursensors;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -27,10 +26,10 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.iot.nucleo.spectre.getyoursensors.data.Board;
-import by.iot.nucleo.spectre.getyoursensors.data.Sensor;
-import by.iot.nucleo.spectre.getyoursensors.data.SensorType;
-import by.iot.nucleo.spectre.getyoursensors.dummy.DummyBoardContent;
+import by.iot.nucleo.spectre.getyoursensors.model.Board;
+import by.iot.nucleo.spectre.getyoursensors.model.Sensor;
+import by.iot.nucleo.spectre.getyoursensors.model.SensorType;
+import by.iot.nucleo.spectre.getyoursensors.data.DataManager;
 
 /**
  * A fragment representing a single Board detail screen.
@@ -52,7 +51,7 @@ public class BoardDetailFragment extends Fragment implements App.MqttListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItem = DummyBoardContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = DataManager.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {

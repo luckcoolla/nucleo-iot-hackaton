@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-import by.iot.nucleo.spectre.getyoursensors.data.Sensor;
+import by.iot.nucleo.spectre.getyoursensors.model.Sensor;
 
 public class SensorsDeserialiser {
     public static Sensor[] getSensors(String gsonInput) {

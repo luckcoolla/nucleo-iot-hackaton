@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import by.iot.nucleo.spectre.getyoursensors.data.Sensor;
+import by.iot.nucleo.spectre.getyoursensors.model.Sensor;
 import by.iot.nucleo.spectre.getyoursensors.service.DataService;
 import by.iot.nucleo.spectre.getyoursensors.service.SensorsDeserialiser;
 
