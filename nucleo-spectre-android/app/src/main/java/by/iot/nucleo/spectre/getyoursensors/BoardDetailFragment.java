@@ -150,7 +150,8 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
                 data.addDataSet(set);
             }
 
-            data.addEntry(new Entry(set.getEntryCount(), sensor.getValue()), 0);
+            float newX = set.getEntryCount();
+            data.addEntry(new Entry(newX, sensor.getValue()), 0);
             data.notifyDataChanged();
 
             // let the chart know it's data has changed
@@ -161,7 +162,9 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
             // move to the latest entry
-            chart.moveViewToX(data.getEntryCount());
+            if (chart.isFullyZoomedOut()) {
+                chart.moveViewToX(newX);
+            }
 
             // this automatically refreshes the chart (calls invalidate())
             // mChart.moveViewTo(data.getXValCount()-7, 55f,
@@ -188,7 +191,7 @@ public class BoardDetailFragment extends Fragment implements MqttService.MqttLis
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(color);
         set.setValueTextSize(9f);
-        set.setDrawValues(false);
+        set.setDrawValues(true);
         return set;
     }
 
