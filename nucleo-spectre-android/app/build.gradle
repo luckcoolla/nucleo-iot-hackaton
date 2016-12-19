@@ -7,11 +7,11 @@ android {
         applicationId "by.iot.nucleo.spectre.getyoursensors"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.1"
+        versionCode 5
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "MQTT_SERVER_URL", project.properties.mqtt_server_url)
-        buildConfigField("String", "BACKEND_SERVER_URL", project.properties.backend_server_url)
+        buildConfigField("String", "MQTT_SERVER_URL", "\"${project.properties.mqtt_server_url}\"")
+        buildConfigField("String", "BACKEND_SERVER_URL", "\"${project.properties.backend_server_url}\"")
     }
     buildTypes {
         release {

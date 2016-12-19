@@ -1,0 +1,18 @@
+1) keytool -genkey -v -keystore nucleo-release-key-19-12-16.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-test-alias
+keystoreReleasePwd1
+keytool -genkey -v -keystore nucleo-release-key-20-12-16.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-test-alias
+keystoreReleasePwd2
+
+2) apksigner sign --ks nucleo-release-key-19-12-16.jks --out app-release-signed-19-12-16.apk app-release-unsigned-19-12-16.apk
+/*
+cool@cool-pc:~/andr/sdk/build-tools/25.0.1$ ./apksigner sign --ks nucleo-release-key-19-12-16.jks --out app-release-signed-19-12-16.apk app-release-unsigned-19-12-16.apk
+Keystore password for signer #1: keystoreReleasePwd1
+*/
+3) apksigner verify app-release-signed-19-12-16.apk
+
+4-5)
+./apksigner sign --ks nucleo-release-key-20-12-16.jks --out app-release-signed-20-12-16-1.2-5.apk app-release-unsigned-20-12-16-1.2-5.apk
+./apksigner verify app-release-signed-20-12-16-1.2-5.apk
+
+
+
